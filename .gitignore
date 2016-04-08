@@ -1,0 +1,6 @@
+*.pdf
+build/
+
+# Ignore the tmp files from editors
+*~
+.sw*
