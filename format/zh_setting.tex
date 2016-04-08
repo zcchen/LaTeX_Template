@@ -1,0 +1,69 @@
+% latin fonts setting :
+% http://tex.stackexchange.com/questions/25249/how-do-i-use-a-particular-font-for-a-small-section-of-text-in-my-document
+% 中英文搭配
+% https://www.zhihu.com/question/27031612/answer/34991420
+\newcommand*{\rmrfont}{\fontfamily{ppl}\selectfont}
+    % 常常与楷体进行搭配使用
+
+\usepackage[
+    fontset = none,
+    zihao = -4,
+    heading = true,
+    linespread = 1.4,
+    UTF8,
+    ]{ctex}
+\usepackage{titlecaps}
+\Addlcwords{is for an of}
+
+\ctexset{%
+    fontset = fandol,
+    autoindent = true,
+    punct = quanjiao,
+    space = auto,
+    today = small,
+    section = {%
+        name = {\S},
+        format = \large\bf,
+        titleformat = \titlecap,
+        %numberformat = \Large\sffamily,
+    },
+}
+%\ifdef\chapter{%
+    %\ctexset{%
+        %chapter = {%
+            %name = {第,章},
+            %number = \chinese{chapter},
+            %format = \Huge\sffamily\heiti\centering,
+            %titleformat = \titlecap,
+            %aftertitle = {\bigskip\hrule height 1bp \relax
+                          %\thispagestyle{zhChapterPageStyle}
+                        %},
+        %},
+    %}
+%}{%
+    %section = {%
+        %name = {第,节},
+        %format = \Large\heiti\sffamily,
+        %numberformat = \Large\sffamily,
+    %},
+%}
+
+
+\setenumerate{%
+    fullwidth,
+    itemindent=\parindent,
+    listparindent=\parindent,
+    itemsep=0ex,
+    partopsep=0pt,
+    parsep=0ex,
+    nolistsep
+}
+\setitemize{%
+    fullwidth,
+    itemindent=\parindent,
+    listparindent=\parindent,
+    itemsep=0ex,
+    partopsep=0pt,
+    parsep=0ex,
+    nolistsep
+}

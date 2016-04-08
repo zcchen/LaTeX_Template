@@ -1,0 +1,17 @@
+\newcommand{\biggerLineSep}{%
+    %\null\vspace*{1.0em} \\
+    \\[0.8em]
+}
+
+\makeatletter
+\def\hlinewd#1{%
+    \noalign{\ifnum0=`}\fi\hrule \@height#1 %
+    \futurelet\reserved@a\@xhline%
+}
+\makeatother
+
+\newcolumntype{M}[1]{>{\centering}m{#1}}
+\newcolumntype{P}[1]{>{\centering}p{#1}}
+\newcolumntype{L}{>{\centering}l}
+\newcolumntype{C}{>{\centering}c}
+\newcolumntype{N}{@{}m{0pt}@{}}

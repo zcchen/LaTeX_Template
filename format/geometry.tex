@@ -1,0 +1,24 @@
+\ifPDFTeX%
+    \usepackage[pdftex]{geometry}
+\else
+    \ifxetex%
+        \usepackage[xetex]{geometry}
+    \else%
+        \ifLuaTeX%
+        \else
+        \fi
+        \usepackage{geometry}
+    \fi
+\fi
+
+\geometry{%
+    top = 26mm,
+    bottom = 18mm,
+    left = 28mm,
+    right = 28mm,
+    headheight = 10mm,
+    headsep = 4mm,
+    footskip = 8mm,
+    bindingoffset = 5mm,
+}
+

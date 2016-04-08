@@ -1,0 +1,76 @@
+\documentclass[10pt, a4paper]{article}
+
+\usepackage{iftex}
+\usepackage[T1]{fontenc}
+    % 8bit character support.
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+    % latin modern package, very useful for many documents
+\ifPDFTeX%
+    \relax
+\else
+    \ifXeTeX%
+        \usepackage{xunicode,xltxtra}
+    \else
+        \ifLuaTeX%
+            \usepackage{luatextra}
+        \fi
+    \fi
+    \defaultfontfeatures{Ligatures=TeX}
+\fi % set the basic config for different latex engine
+
+%------ common package for me --------
+\usepackage[bottom]{footmisc}
+%\usepackage{amssymb,amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{calc}
+\usepackage{ulem}   % better underline, could wrap words.
+\usepackage{relsize}
+    % \larger and \smaller command for some text only.
+\usepackage[inline]{enumitem}
+\usepackage{array}
+\usepackage{etoolbox}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+%------ common package for me --------
+
+% ---------- multi engine options ------
+\ifPDFTeX%
+    \usepackage[pdftex]{xcolor}
+    \usepackage[setpagesize=false, % page size defined by xetex
+                unicode=false, % unicode breaks when used with xetex
+                pdftex]{hyperref}
+\else
+    \ifXeTeX%
+        \usepackage[xetex]{xcolor}
+        \usepackage[setpagesize=false, % page size defined by xetex
+                    unicode=false, % unicode breaks when used with xetex
+                    xetex]{hyperref}
+    \else
+        \ifLuaTeX%
+        \else
+        \fi
+        \usepackage[setpagesize=false, % page size defined by xetex
+                    unicode=false, % unicode breaks when used with xetex
+                    ]{hyperref}
+        \usepackage[]{xcolor}
+    \fi
+\fi
+
+% ----------- config input ----------
+\input{format/geometry.tex}
+\input{format/hyper_setting.tex}
+\input{format/twoside_setting.tex}
+\input{format/zh_setting.tex}
+\input{format/zh_fancypage.tex}
+
+\input{data/__packages.tex}
+\input{data/__define.tex}
+\input{data/__title.tex}
+\begin{document}
+\maketitle
+
+\input{data/__meta.tex}
+
+\end{document}
