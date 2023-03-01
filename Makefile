@@ -1,34 +1,47 @@
 LATEX_ENGINE    = xelatex
-OUTPUT_FILE     = 示例文档.pdf
-OUTPUT_DIR      = build
+OUTPUT_FILE     = $(notdir $(CURDIR)).pdf
 
-# If you don't know why,
-# Please DO NOT edit below:
-data_dir        = data/
-template_file   = template.tex
-format_dir      = format/
+TEMPLATE_FILE   = template.tex
+FORMAT_DIR      = format/
+DATA_DIR        = data/
+BUILD_DIR       = build/
 
-template_basename = $(basename ${template_file})
-latexmk_param     = -output-directory=${OUTPUT_DIR} -pdflatex=${LATEX_ENGINE}
-latexmk_param    += -use-make -pvc -new-viewer- -f -view=pdf
+# files and dirs configurations
+TEMPLATE_BASENAME = $(basename $(TEMPLATE_FILE))
+FORMAT_FILES      = $(call rwildcard,$(FORMAT_DIR)/,*.tex)
+DATA_FILES        = $(call rwildcard,$(DATA_DIR)/,*.tex)
 
-all: make_dir ${data_dir} ${template_file} ${format_dir}
-	${LATEX_ENGINE} -output-directory=${OUTPUT_DIR} ${template_file}
-	${LATEX_ENGINE} -output-directory=${OUTPUT_DIR} ${template_file}
-	${LATEX_ENGINE} -output-directory=${OUTPUT_DIR} ${template_file}
-	cp ${OUTPUT_DIR}/${template_basename}.pdf ${OUTPUT_FILE}
+# latexmk param configurations
+LATEXMK_PARAM     = -output-directory=$(BUILD_DIR)
+LATEXMK_PARAM    += -$(LATEX_ENGINE) -pdf$(LATEX_ENGINE)=$(LATEX_ENGINE)
+LATEXMK_PARAM    += -use-make -new-viewer- -view=pdf -pvc -f
 
-make_dir:
-	mkdir -p ${OUTPUT_DIR}
+# The recursive wildcard
+rwildcard         = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
 
-auto: make_dir
-	latexmk ${latexmk_param} ${template_basename}
+.PHONY: all auto clean clean/all
 
-clean_all:
-	-rm -rf ${OUTPUT_DIR}
-	-rm ${OUTPUT_FILE}
+all: $(OUTPUT_FILE)
+
+$(OUTPUT_FILE): $(BUILD_DIR)/$(TEMPLATE_BASENAME).pdf
+	cp -av $< $@
+
+#$(BUILD_DIR)/$(TEMPLATE_BASENAME).pdf: $(TEMPLATE_FILE) $(FORMAT_FILES) $(DATA_FILES) $(BUILD_DIR)
+$(BUILD_DIR)/$(TEMPLATE_BASENAME).pdf: $(TEMPLATE_FILE) $(FORMAT_FILES) $(DATA_FILES)
+	mkdir -p $(dir $@)
+	$(LATEX_ENGINE) -output-directory=$(dir $@) $<
+	$(LATEX_ENGINE) -output-directory=$(dir $@) $<
+	$(LATEX_ENGINE) -output-directory=$(dir $@) $<
+
+auto: $(BUILD_DIR)
+	latexmk $(LATEXMK_PARAM) $(TEMPLATE_BASENAME)
+
+clean/all: clean
+	-rm $(OUTPUT_FILE)
 
 clean:
-	#-find ./${OUTPUT_DIR} ! -name '${OUTPUT_FILE}' -type f -exec rm -f {} +
-	-rm -rf ${OUTPUT_DIR}
+	-rm -rf $(BUILD_DIR)
+
+$(BUILD_DIR):
+	mkdir -p $@
 
