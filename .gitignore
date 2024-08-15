@@ -1,5 +1,6 @@
 *.pdf
 build/
+output/
 
 # Ignore the tmp files from editors
 *~

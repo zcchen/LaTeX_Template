@@ -1,0 +1,14 @@
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+
+\fancypagestyle{zhPageStyle}{%
+    \fancyhf{}
+    \lhead{}
+    \rhead{}
+    \cfoot{\footnotesize \thepage/\pageref{LastPage}}
+    \lfoot{}
+    \rfoot{}
+    \renewcommand{\headrulewidth}{0pt}
+    \fancyhfoffset{0pt}
+}
+\pagestyle{zhPageStyle}

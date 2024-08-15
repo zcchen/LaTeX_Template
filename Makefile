@@ -1,47 +1,45 @@
+SRCS        = $(wildcard *.tex)
+OBJS        = $(basename $(SRCS)).pdf
+DEPS        = $(wildcard $(FORMAT_DIR)/*.tex)
+
+BUILD_DIR   = build
+OUTPUT_DIR  = output
+FORMAT_DIR  = format
+
 LATEX_ENGINE    = xelatex
-OUTPUT_FILE     = $(notdir $(CURDIR)).pdf
+#LATEX_ENGINE    = pdflatex
+LATEX_ENG_PARAM = -output-directory=$(BUILD_DIR) #-dALLOWPSTRANSPARENCY
+latexmk_param   = $(LATEX_ENG_PARAM) -$(LATEX_ENGINE)
+latexmk_param  += -use-make -pvc -new-viewer- -f -view=pdf
 
-TEMPLATE_FILE   = template.tex
-FORMAT_DIR      = format/
-DATA_DIR        = data/
-BUILD_DIR       = build/
+.PHONY: all auto/%.pdf clean clean/all
 
-# files and dirs configurations
-TEMPLATE_BASENAME = $(basename $(TEMPLATE_FILE))
-FORMAT_FILES      = $(call rwildcard,$(FORMAT_DIR)/,*.tex)
-DATA_FILES        = $(call rwildcard,$(DATA_DIR)/,*.tex)
+all: $(OBJS)
 
-# latexmk param configurations
-LATEXMK_PARAM     = -output-directory=$(BUILD_DIR)
-LATEXMK_PARAM    += -$(LATEX_ENGINE) -pdf$(LATEX_ENGINE)=$(LATEX_ENGINE)
-LATEXMK_PARAM    += -use-make -new-viewer- -view=pdf -pvc -f
+%.pdf: %.tex $(BUILD_DIR)/%.title.tex $(BUILD_DIR)/format.tex $(BUILD_DIR) $(OUTPUT_DIR)
+	${LATEX_ENGINE} $(LATEX_ENG_PARAM) $(basename $<)
+	${LATEX_ENGINE} $(LATEX_ENG_PARAM) $(basename $<)
+	${LATEX_ENGINE} $(LATEX_ENG_PARAM) $(basename $<)
+	cp ${BUILD_DIR}/$@ $(OUTPUT_DIR)/$@
 
-# The recursive wildcard
-rwildcard         = $(wildcard $1$2) $(foreach d,$(wildcard $1*),$(call rwildcard,$d/,$2))
+$(BUILD_DIR)/format.tex: $(DEPS) $(BUILD_DIR)
+	ls -1 $(DEPS) | sed -e 's/^/\\input{..\//' | sed -e 's/$$/}/' > $@
 
-.PHONY: all auto clean clean/all
+$(BUILD_DIR)/%.title.tex: %.tex $(BUILD_DIR) FORCE
+	@echo "\\\title{`ls -1 $< | sed -e 's/\.tex$$//'`}" > $@
+	@echo "\\\date{`git --no-pager log -1 --format='%cd' --date='format:%Y-%m-%d' $<`}" >> $@
+	@echo "\\\author{`git shortlog -n -s -- $< | awk '{print $$2}' | tr '\n' ',' | sed -e 's/,$$//' -e 's/,/& /'`}" >> $@
 
-all: $(OUTPUT_FILE)
-
-$(OUTPUT_FILE): $(BUILD_DIR)/$(TEMPLATE_BASENAME).pdf
-	cp -av $< $@
-
-#$(BUILD_DIR)/$(TEMPLATE_BASENAME).pdf: $(TEMPLATE_FILE) $(FORMAT_FILES) $(DATA_FILES) $(BUILD_DIR)
-$(BUILD_DIR)/$(TEMPLATE_BASENAME).pdf: $(TEMPLATE_FILE) $(FORMAT_FILES) $(DATA_FILES)
-	mkdir -p $(dir $@)
-	$(LATEX_ENGINE) -output-directory=$(dir $@) $<
-	$(LATEX_ENGINE) -output-directory=$(dir $@) $<
-	$(LATEX_ENGINE) -output-directory=$(dir $@) $<
-
-auto: $(BUILD_DIR)
-	latexmk $(LATEXMK_PARAM) $(TEMPLATE_BASENAME)
-
-clean/all: clean
-	-rm $(OUTPUT_FILE)
-
-clean:
-	-rm -rf $(BUILD_DIR)
-
-$(BUILD_DIR):
+$(BUILD_DIR) $(OUTPUT_DIR):
 	mkdir -p $@
 
+%/auto: %.tex $(BUILD_DIR)/%.title.tex $(BUILD_DIR)/format.tex $(BUILD_DIR)
+	latexmk ${latexmk_param} $(basename $<)
+
+clean/all: clean
+	-rm -rf $(OBJS)
+
+clean:
+	-rm -rvf $(BUILD_DIR)
+
+FORCE:

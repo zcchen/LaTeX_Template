@@ -6,7 +6,7 @@
     % 常常与楷体进行搭配使用
 
 \usepackage[
-    fontset = none,
+    %fontset = none,
     zihao = -4,
     heading = true,
     linespread = 1.4,
@@ -16,17 +16,24 @@
 \Addlcwords{is for an of}
 
 \ctexset{%
-    fontset = fandol,
+    %fontset = fandol,
     autoindent = true,
     punct = quanjiao,
     space = auto,
     today = small,
     section = {%
-        name = {\S},
+        %name = {\S},
         format = \large\bf,
-        titleformat = \titlecap,
-        %numberformat = \Large\sffamily,
+        %titleformat = \titlecap,
+        numberformat = \large\sffamily,
     },
+    subsection = {%
+        %name = {\S},
+        format = \large\bf,
+        %titleformat = \titlecap,
+        numberformat = \large\sffamily,
+    },
+    contentsname = {\large\bf\S\ \ 目\quad 录}
 }
 %\ifdef\chapter{%
     %\ctexset{%
@@ -49,6 +56,7 @@
 %}
 
 
+\usepackage{enumitem}
 \setenumerate{%
     fullwidth,
     itemindent=\parindent,

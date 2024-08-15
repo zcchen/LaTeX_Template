@@ -1,37 +1,14 @@
-\fancypagestyle{zhPageStyle}{%
-    \fancyhf{}
-    \lhead{}
-    \rhead{}
-    \cfoot{\footnotesize \thepage/\pageref{LastPage}}
-    \lfoot{}
-    \rfoot{}
-    \renewcommand{\headrulewidth}{0pt}
-    \fancyhfoffset{0pt}
-}
-
-\pagestyle{zhPageStyle}
-%\renewcommand\sectionmark[1]{%
-    %\markright{\CTEXthesection\quad#1}
-%}
-%\ifdef\chaptermark{%
-    %\renewcommand\chaptermark[1]{%
-        %\markboth{\CTEXthechapter\quad#1}{}
-    %}
-%}{}
-
 \makeatletter
 \def\emptyTest#1#2{
     % #1 = varialbe
     % #2 = format
     \ifx#1\empty% ignore it
     \else
-        #2
-        #1
-        \vskip 1ex
+        #2 #1 \vskip 0.5ex
     \fi
 }
 \def\maketitle{%
-    \vskip 5em
+    %\vskip 5em
     \begin{center}
         \fangsong%
         \emptyTest{\@title}{\Huge}
@@ -48,3 +25,4 @@
     \global\let\and\relax
 }
 \makeatother
+
